@@ -51,13 +51,13 @@ export default function WaitlistCard() {
   const onSubmit = async (data: WaitlistSubmission) => {
     try {
       await submitMutation.mutateAsync(data);
-      toast.success("Uspješno ste se prijavili na listu za čekanje!");
+      toast.success("Successfully joined the waitlist!");
       form.reset();
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(error.message || "Došlo je do greške pri prijavi");
+        toast.error(error.message || "An error occurred during registration");
       } else {
-        toast.error("Došlo je do greške pri prijavi");
+        toast.error("An error occurred during registration");
       }
     }
   };
@@ -74,7 +74,7 @@ export default function WaitlistCard() {
             {showQR && (
               <div className="mb-6">
                 <NextImage
-                  src="/zelim-disscount-qr.png"
+                  src="/get-disscount-qr.png"
                   alt="QR Code to join Disscount waitlist"
                   width={256}
                   height={256}
@@ -82,7 +82,7 @@ export default function WaitlistCard() {
                 />
               </div>
             )}
-            Priključi se{" "}
+            Join{" "}
             {statsLoading ? (
               <span className="inline-flex items-center gap-1">
                 <BlocksLoader size={16} />
@@ -90,7 +90,7 @@ export default function WaitlistCard() {
             ) : (
               <span className="text-primary font-bold">{displayCount}+</span>
             )}{" "}
-            drugih ljudi koji željno iščekuju
+            other people patiently awaiting
             <Button
               variant="ghost"
               className="flex items-center justify-center gap-2 mt-2 mx-auto hover:bg-transparent cursor-pointer"
@@ -108,8 +108,8 @@ export default function WaitlistCard() {
           </CardTitle>
 
           <CardDescription>
-            Upiši svoj email kako bi te obavijestili čim aplikacija postane
-            dostupna!
+            Enter your email to be notified as soon as the app becomes
+            available!
           </CardDescription>
         </CardHeader>
 
@@ -126,7 +126,7 @@ export default function WaitlistCard() {
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="tvoj@email.com"
+                        placeholder="your@email.com"
                         {...field}
                         disabled={form.formState.isSubmitting}
                       />
@@ -145,7 +145,7 @@ export default function WaitlistCard() {
                 {form.formState.isSubmitting ? (
                   <BlocksLoader size={20} color="white" />
                 ) : (
-                  "OBAVIJESTI ME"
+                  "NOTIFY ME"
                 )}
               </Button>
             </form>
