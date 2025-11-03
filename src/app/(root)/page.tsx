@@ -1,8 +1,7 @@
 import HeroSection from "@/app/(root)/components/sections/hero-section";
-import FeaturesSection from "@/app/(root)/components/sections/features-section";
-import StoresSection from "@/app/(root)/components/sections/stores-section";
-import PricingSection from "@/app/(root)/components/sections/pricing-section";
-import StatsSection from "@/app/(root)/components/sections/stats-section";
+// import FeaturesSection from "@/app/(root)/components/sections/features-section";
+// import StoresSection from "@/app/(root)/components/sections/stores-section";
+// import StatsSection from "@/app/(root)/components/sections/stats-section";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
