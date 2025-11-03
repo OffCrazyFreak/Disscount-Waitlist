@@ -31,8 +31,9 @@ export default function FooterSection() {
             </Link>
 
             <Copyright size={16} />
-            <span className="whitespace-nowrap">Jakov Jakovac</span>
-            <span>{new Date().getFullYear()}</span>
+            <span className="whitespace-nowrap">
+              Jakov Jakovac {new Date().getFullYear()}
+            </span>
           </div>
 
           <div className="mx-auto flex items-center justify-center gap-4">
