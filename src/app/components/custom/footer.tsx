@@ -1,9 +1,14 @@
-// import { Logo } from "@/components/logo";
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Copyright } from "lucide-react";
 import Image from "next/image";
 
 export default function FooterSection() {
+  const pathname = usePathname();
+  const isEnglish = pathname.startsWith("/en");
+
   return (
     <footer className="mt-auto">
       <div className="m-4">
@@ -31,6 +36,22 @@ export default function FooterSection() {
           </div>
 
           <div className="mx-auto flex items-center justify-center gap-4">
+            {/* Language Switcher */}
+            <Link
+              href={isEnglish ? "/" : "/en"}
+              aria-label={
+                isEnglish ? "Switch to Croatian" : "Switch to English"
+              }
+              className="block hover:scale-110 transition-all"
+            >
+              <Image
+                src={isEnglish ? "/flags/cro.png" : "/flags/eng.png"}
+                alt={isEnglish ? "Croatian flag" : "English flag"}
+                width={32}
+                height={32}
+                className="size-6"
+              />
+            </Link>
             <Link
               href="https://github.com/OffCrazyFreak/Disscount"
               target="_blank"

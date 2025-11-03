@@ -74,7 +74,7 @@ export default function WaitlistCard() {
             {showQR && (
               <div className="mb-6">
                 <NextImage
-                  src="/zelim-disscount-qr.png"
+                  src="/qr/zelim-disscount-qr.png"
                   alt="QR Code to join Disscount waitlist"
                   width={256}
                   height={256}
