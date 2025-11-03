@@ -18,6 +18,10 @@ export function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = "/en";
     return NextResponse.redirect(url);
+  } else if (pathname === "/en" && host?.startsWith("zelim.")) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
