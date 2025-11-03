@@ -33,6 +33,14 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       // Handle unauthorized
     }
+
+    // Extract error message from response if available
+    if (error.response?.data?.error) {
+      const customError = new Error(error.response.data.error);
+      customError.name = error.name;
+      return Promise.reject(customError);
+    }
+
     return Promise.reject(error);
   }
 );

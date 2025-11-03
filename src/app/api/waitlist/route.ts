@@ -20,10 +20,23 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(entry, { status: 201 });
   } catch (error) {
-    // Check for unique constraint violation
-    if (error instanceof Error && error.message.includes("UNIQUE")) {
+    console.error("Waitlist error:", error);
+
+    // Detect language from referer or accept-language header
+    const referer = request.headers.get("referer") || "";
+    const isEnglish = referer.includes("/en");
+
+    const errorCode = (error as any)?.code || (error as any)?.cause?.code;
+    const errorMessage = error instanceof Error ? error.message : "";
+    const causeMessage = (error as any)?.cause?.message || "";
+
+    if (errorCode === "SQLITE_CONSTRAINT") {
       return NextResponse.json(
-        { error: "Email adresa već zapisana" },
+        {
+          error: isEnglish
+            ? "Email address already registered"
+            : "Email adresa već zapisana",
+        },
         { status: 409 }
       );
     }
@@ -32,7 +45,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
     return NextResponse.json(
-      { error: "Došlo je do greške pri prijavi" },
+      {
+        error: isEnglish
+          ? "An error occurred during registration"
+          : "Došlo je do greške pri prijavi",
+      },
       { status: 500 }
     );
   }
