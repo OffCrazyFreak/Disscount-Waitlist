@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Copyright } from "lucide-react";
 import Image from "next/image";
 
 import { InstagramIcon } from "@/components/ui/InstagramIcon";
 import { LinkedInIcon } from "@/components/ui/LinkedinIcon";
 import { GithubIcon } from "@/components/ui/GithubIcon";
+import { CopyrightIcon } from "@/components/ui/CopyrightIcon";
 
 export default function FooterSection() {
   const pathname = usePathname();
@@ -34,7 +34,7 @@ export default function FooterSection() {
               <span className="font-bold text-primary">Disscount</span>
             </Link>
 
-            <Copyright size={16} />
+            <CopyrightIcon size={16} />
             <span className="whitespace-nowrap">
               Jakov Jakovac {new Date().getFullYear()}
             </span>
