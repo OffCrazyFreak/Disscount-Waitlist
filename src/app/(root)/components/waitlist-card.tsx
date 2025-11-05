@@ -5,13 +5,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import NextImage from "next/image";
-import { Share2 } from "lucide-react";
 
 import {
   BellRingIcon,
   type BellRingIconHandle,
 } from "@/components/ui/BellRingIcon";
 import { LinkIcon, type LinkIconHandle } from "@/components/ui/LinkIcon";
+import { ShareIcon, type ShareIconHandle } from "@/components/ui/ShareIcon";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,6 +42,7 @@ export default function WaitlistCard() {
   const [copied, setCopied] = useState(false);
   const bellIconRef = useRef<BellRingIconHandle>(null);
   const linkIconRef = useRef<LinkIconHandle>(null);
+  const shareIconRef = useRef<ShareIconHandle>(null);
 
   // Get waitlist count
   const { data: stats, isLoading: statsLoading } =
@@ -236,8 +237,17 @@ export default function WaitlistCard() {
             size="lg"
             effect="ringHover"
             onClick={handleCopyLink}
-            onMouseEnter={() => linkIconRef.current?.startAnimation()}
-            onMouseLeave={() => linkIconRef.current?.stopAnimation()}
+            onMouseEnter={() => {
+              if (copied) {
+                linkIconRef.current?.startAnimation();
+              } else {
+                shareIconRef.current?.startAnimation();
+              }
+            }}
+            onMouseLeave={() => {
+              linkIconRef.current?.stopAnimation();
+              shareIconRef.current?.stopAnimation();
+            }}
             className="w-xs transition-all duration-150 ease-in-out hover:scale-98"
           >
             <span className="flex items-center gap-2 relative">
@@ -249,7 +259,9 @@ export default function WaitlistCard() {
                     copied ? "scale-100 opacity-100" : "scale-0 opacity-0"
                   }`}
                 />
-                <Share2
+                <ShareIcon
+                  ref={shareIconRef}
+                  size={16}
                   className={`size-4 absolute transition-all duration-300 ${
                     copied ? "scale-0 opacity-0" : "scale-100 opacity-100"
                   }`}
