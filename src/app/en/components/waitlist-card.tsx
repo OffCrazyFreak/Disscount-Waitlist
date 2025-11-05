@@ -27,7 +27,7 @@ import BlocksLoader from "@/components/custom/blocks-loader";
 import waitlistService from "@/lib/api/waitlist/index";
 import {
   WaitlistSubmission,
-  waitlistSubmissionSchema,
+  waitlistSubmissionSchemaEn,
 } from "@/lib/api/schemas/waitlist";
 
 export default function WaitlistCard() {
@@ -37,11 +37,20 @@ export default function WaitlistCard() {
   const { data: stats, isLoading: statsLoading } =
     waitlistService.useGetWaitlistCount();
 
+  // Detect language based on domain or pathname
+  const isEnglish =
+    typeof window !== "undefined" &&
+    (window.location.hostname === "get.disscount.me" ||
+      window.location.pathname.startsWith("/en"));
+
   // Setup form with React Hook Form
   const form = useForm<WaitlistSubmission>({
-    resolver: zodResolver(waitlistSubmissionSchema),
+    resolver: zodResolver(waitlistSubmissionSchemaEn),
     defaultValues: {
+      name: "",
+      surname: "",
       email: "",
+      lang: "en",
     },
   });
 
@@ -50,7 +59,11 @@ export default function WaitlistCard() {
 
   const onSubmit = async (data: WaitlistSubmission) => {
     try {
-      await submitMutation.mutateAsync(data);
+      // Set language to "en" for English page or get.disscount.me domain
+      await submitMutation.mutateAsync({
+        ...data,
+        lang: isEnglish ? "en" : "cro",
+      });
       toast.success("Successfully joined the waitlist!");
       form.reset();
     } catch (error) {
@@ -82,7 +95,7 @@ export default function WaitlistCard() {
                 />
               </div>
             )}
-            Join{" "}
+            Join over{" "}
             {statsLoading ? (
               <span className="inline-flex items-center gap-1">
                 <BlocksLoader size={16} />
@@ -107,17 +120,63 @@ export default function WaitlistCard() {
             </Button>
           </CardTitle>
 
-          <CardDescription>
-            Enter your email to be notified as soon as the app becomes
-            available!
+          <CardDescription className="space-y-2">
+            <div className="text-pretty">
+              Be among the first to save{" "}
+              <span className="text-primary">up to 50%</span> on your next
+              grocery shopping trip!
+            </div>
+
+            <Separator className="my-4" />
+
+            <div className="text-pretty">
+              Enter your email to be notified as soon as the app becomes
+              available!
+            </div>
           </CardDescription>
         </CardHeader>
-
-        <Separator className="max-w-sm mx-auto my-4" />
 
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Name"
+                          {...field}
+                          disabled={form.formState.isSubmitting}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="surname"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          placeholder="Surname"
+                          {...field}
+                          disabled={form.formState.isSubmitting}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
               <FormField
                 control={form.control}
                 name="email"

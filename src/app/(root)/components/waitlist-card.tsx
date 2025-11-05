@@ -27,7 +27,7 @@ import BlocksLoader from "@/components/custom/blocks-loader";
 import waitlistService from "@/lib/api/waitlist/index";
 import {
   WaitlistSubmission,
-  waitlistSubmissionSchema,
+  waitlistSubmissionSchemaCro,
 } from "@/lib/api/schemas/waitlist";
 
 export default function WaitlistCard() {
@@ -39,9 +39,12 @@ export default function WaitlistCard() {
 
   // Setup form with React Hook Form
   const form = useForm<WaitlistSubmission>({
-    resolver: zodResolver(waitlistSubmissionSchema),
+    resolver: zodResolver(waitlistSubmissionSchemaCro),
     defaultValues: {
+      name: "",
+      surname: "",
       email: "",
+      lang: "cro",
     },
   });
 
@@ -50,7 +53,8 @@ export default function WaitlistCard() {
 
   const onSubmit = async (data: WaitlistSubmission) => {
     try {
-      await submitMutation.mutateAsync(data);
+      // Set language to "cro" for Croatian page
+      await submitMutation.mutateAsync({ ...data, lang: "cro" });
       toast.success("Uspješno ste se prijavili na listu za čekanje!");
       form.reset();
     } catch (error) {
@@ -67,66 +71,73 @@ export default function WaitlistCard() {
   const displayCount = Math.max(100, Math.ceil(waitlistCount / 50) * 50);
 
   return (
-    <div className="max-w-xl mx-auto px-4">
-      <Card className="shadow-lg">
-        <CardHeader className="text-center space-y-4">
-          <CardTitle className="text-lg font-medium">
-            {showQR && (
-              <div className="mb-6">
-                <NextImage
-                  src="/qr/zelim-disscount-qr.png"
-                  alt="QR Code to join Disscount waitlist"
-                  width={256}
-                  height={256}
-                  className="mx-auto w-48 sm:w-64"
-                />
-              </div>
-            )}
-            Priključi se{" "}
-            {statsLoading ? (
-              <span className="inline-flex items-center gap-1">
-                <BlocksLoader size={16} />
-              </span>
-            ) : (
-              <span className="text-primary font-bold">{displayCount}+</span>
-            )}{" "}
-            drugih ljudi koji željno iščekuju
-            <Button
-              variant="ghost"
-              className="flex items-center justify-center gap-2 mt-2 mx-auto hover:bg-transparent cursor-pointer"
-              onClick={() => setShowQR(!showQR)}
-            >
+    <Card className="shadow-lg">
+      <CardHeader className="text-center space-y-4">
+        <CardTitle className="text-lg font-medium">
+          {showQR && (
+            <div className="mb-6">
               <NextImage
-                src="/disscount-logo.png"
-                alt="Disscount logo"
-                width={128}
-                height={128}
-                className="size-8"
+                src="/qr/zelim-disscount-qr.png"
+                alt="QR Code to join Disscount waitlist"
+                width={256}
+                height={256}
+                className="mx-auto w-48 sm:w-64"
               />
-              <span className="text-primary text-xl font-bold">Disscount</span>
-            </Button>
-          </CardTitle>
+            </div>
+          )}
+          Priključi se{" "}
+          {statsLoading ? (
+            <span className="inline-flex items-center gap-1">
+              <BlocksLoader size={16} />
+            </span>
+          ) : (
+            <span className="text-primary font-bold">{displayCount}+</span>
+          )}{" "}
+          drugih ljudi koji željno iščekuju
+          <Button
+            variant="ghost"
+            className="flex items-center justify-center gap-2 mt-2 mx-auto hover:bg-transparent cursor-pointer"
+            onClick={() => setShowQR(!showQR)}
+          >
+            <NextImage
+              src="/disscount-logo.png"
+              alt="Disscount logo"
+              width={128}
+              height={128}
+              className="size-8"
+            />
+            <span className="text-primary text-xl font-bold">Disscount</span>
+          </Button>
+        </CardTitle>
 
-          <CardDescription>
+        <CardDescription className="space-y-2">
+          <div className="text-pretty">
+            Budi među prvima koji će uštediti i{" "}
+            <span className="text-primary">do 50%</span> na idućoj kupovini!
+          </div>
+
+          <Separator className="my-4" />
+
+          <div className="text-pretty">
             Upiši svoj email kako bi te obavijestili čim aplikacija postane
             dostupna!
-          </CardDescription>
-        </CardHeader>
+          </div>
+        </CardDescription>
+      </CardHeader>
 
-        <Separator className="max-w-sm mx-auto my-4" />
-
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="email"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
                       <Input
-                        type="email"
-                        placeholder="tvoj@email.com"
+                        type="text"
+                        placeholder="Ime"
                         {...field}
                         disabled={form.formState.isSubmitting}
                       />
@@ -136,22 +147,58 @@ export default function WaitlistCard() {
                 )}
               />
 
-              <Button
-                type="submit"
-                className="w-full"
-                size="lg"
-                disabled={form.formState.isSubmitting}
-              >
-                {form.formState.isSubmitting ? (
-                  <BlocksLoader size={20} color="white" />
-                ) : (
-                  "OBAVIJESTI ME"
+              <FormField
+                control={form.control}
+                name="surname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Prezime"
+                        {...field}
+                        disabled={form.formState.isSubmitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="tvoj@email.com"
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? (
+                <BlocksLoader size={20} color="white" />
+              ) : (
+                "OBAVIJESTI ME"
+              )}
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

@@ -25,7 +25,7 @@ export default function HeroSection() {
 
   return (
     <section className="min-h-[80dvh] relative flex items-center">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto">
         <div className="flex flex-col sm:flex-row items-center justify-center gap-10">
           {/* Left side - Logo and text */}
           <div className="flex-1 text-center space-y-6">

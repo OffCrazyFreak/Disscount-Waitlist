@@ -14,7 +14,10 @@ export async function POST(request: NextRequest) {
     const [entry] = await db
       .insert(waitlist)
       .values({
+        name: validatedData.name,
+        surname: validatedData.surname || null,
         email: validatedData.email,
+        lang: validatedData.lang,
       })
       .returning();
 
