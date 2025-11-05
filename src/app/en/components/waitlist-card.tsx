@@ -117,6 +117,7 @@ export default function WaitlistCard() {
                 width={256}
                 height={256}
                 className="mx-auto w-48 sm:w-64"
+                preload={true}
               />
             </div>
           )}
