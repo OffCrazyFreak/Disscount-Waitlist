@@ -80,112 +80,74 @@ export default function WaitlistCard() {
   const displayCount = Math.max(100, Math.ceil(waitlistCount / 50) * 50);
 
   return (
-    <div className="max-w-xl mx-auto px-4">
-      <Card className="shadow-lg">
-        <CardHeader className="text-center space-y-4">
-          <CardTitle className="text-lg font-medium">
-            {showQR && (
-              <div className="mb-6">
-                <NextImage
-                  src="/qr/get-disscount-qr.png"
-                  alt="QR Code to join Disscount waitlist"
-                  width={256}
-                  height={256}
-                  className="mx-auto w-48 sm:w-64"
-                />
-              </div>
-            )}
-            Join over{" "}
-            {statsLoading ? (
-              <span className="inline-flex items-center gap-1">
-                <BlocksLoader size={16} />
-              </span>
-            ) : (
-              <span className="text-primary font-bold">{displayCount}+</span>
-            )}{" "}
-            other people patiently awaiting
-            <Button
-              variant="ghost"
-              className="flex items-center justify-center gap-2 mt-2 mx-auto hover:bg-transparent cursor-pointer"
-              onClick={() => setShowQR(!showQR)}
-            >
+    <Card className="shadow-lg">
+      <CardHeader className="text-center space-y-4">
+        <CardTitle className="text-lg font-medium">
+          {showQR && (
+            <div className="mb-6">
               <NextImage
-                src="/disscount-logo.png"
-                alt="Disscount logo"
-                width={128}
-                height={128}
-                className="size-8"
+                src="/qr/get-disscount-qr.png"
+                alt="QR Code to join Disscount waitlist"
+                width={256}
+                height={256}
+                className="mx-auto w-48 sm:w-64"
               />
-              <span className="text-primary text-xl font-bold">Disscount</span>
-            </Button>
-          </CardTitle>
-
-          <CardDescription className="space-y-2">
-            <div className="text-pretty">
-              Be among the first to save{" "}
-              <span className="text-primary">up to 50%</span> on your next
-              grocery shopping trip!
             </div>
+          )}
+          Join over{" "}
+          {statsLoading ? (
+            <span className="inline-flex items-center gap-1">
+              <BlocksLoader size={16} />
+            </span>
+          ) : (
+            <span className="text-primary font-bold">{displayCount}+</span>
+          )}{" "}
+          other people patiently awaiting
+          <Button
+            variant="ghost"
+            className="flex items-center justify-center gap-2 mt-2 mx-auto hover:bg-transparent cursor-pointer"
+            onClick={() => setShowQR(!showQR)}
+          >
+            <NextImage
+              src="/disscount-logo.png"
+              alt="Disscount logo"
+              width={128}
+              height={128}
+              className="size-8"
+            />
+            <span className="text-primary text-xl font-bold">Disscount</span>
+          </Button>
+        </CardTitle>
 
-            <Separator className="my-4" />
+        <CardDescription className="space-y-2">
+          <div className="text-pretty">
+            Be among the first to save{" "}
+            <span className="text-primary">up to 50%</span> on your next grocery
+            shopping trip!
+          </div>
 
-            <div className="text-pretty">
-              Enter your email to be notified as soon as the app becomes
-              available!
-            </div>
-          </CardDescription>
-        </CardHeader>
+          <Separator className="my-4" />
 
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Name"
-                          {...field}
-                          disabled={form.formState.isSubmitting}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+          <div className="text-pretty">
+            Enter your email to be notified as soon as the app becomes
+            available!
+          </div>
+        </CardDescription>
+      </CardHeader>
 
-                <FormField
-                  control={form.control}
-                  name="surname"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          placeholder="Surname"
-                          {...field}
-                          disabled={form.formState.isSubmitting}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="email"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
                       <Input
-                        type="email"
-                        placeholder="your@email.com"
+                        type="text"
+                        placeholder="Name"
                         {...field}
                         disabled={form.formState.isSubmitting}
                       />
@@ -195,22 +157,58 @@ export default function WaitlistCard() {
                 )}
               />
 
-              <Button
-                type="submit"
-                className="w-full"
-                size="lg"
-                disabled={form.formState.isSubmitting}
-              >
-                {form.formState.isSubmitting ? (
-                  <BlocksLoader size={20} color="white" />
-                ) : (
-                  "NOTIFY ME"
+              <FormField
+                control={form.control}
+                name="surname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        placeholder="Surname"
+                        {...field}
+                        disabled={form.formState.isSubmitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 )}
-              </Button>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
+              />
+            </div>
+
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="your@email.com"
+                      {...field}
+                      disabled={form.formState.isSubmitting}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <Button
+              type="submit"
+              className="w-full"
+              size="lg"
+              disabled={form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? (
+                <BlocksLoader size={20} color="white" />
+              ) : (
+                "NOTIFY ME"
+              )}
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }
