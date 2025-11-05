@@ -1,11 +1,17 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import NextImage from "next/image";
-import { Share2, Link2, Bell } from "lucide-react";
+import { Share2 } from "lucide-react";
+
+import {
+  BellRingIcon,
+  type BellRingIconHandle,
+} from "@/components/ui/BellRingIcon";
+import { LinkIcon, type LinkIconHandle } from "@/components/ui/LinkIcon";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,6 +40,8 @@ import {
 export default function WaitlistCard() {
   const [showQR, setShowQR] = useState(false);
   const [copied, setCopied] = useState(false);
+  const bellIconRef = useRef<BellRingIconHandle>(null);
+  const linkIconRef = useRef<LinkIconHandle>(null);
 
   // Get waitlist count
   const { data: stats, isLoading: statsLoading } =
@@ -217,13 +225,16 @@ export default function WaitlistCard() {
               size="lg"
               disabled={form.formState.isSubmitting}
               effect="shineHover"
-              icon={Bell}
-              iconPlacement="left"
+              onMouseEnter={() => bellIconRef.current?.startAnimation()}
+              onMouseLeave={() => bellIconRef.current?.stopAnimation()}
             >
               {form.formState.isSubmitting ? (
                 <BlocksLoader size={20} color="white" />
               ) : (
-                "NOTIFY ME"
+                <>
+                  <BellRingIcon ref={bellIconRef} size={16} />
+                  <span>NOTIFY ME</span>
+                </>
               )}
             </Button>
           </form>
@@ -235,22 +246,22 @@ export default function WaitlistCard() {
             size="lg"
             effect="ringHover"
             onClick={handleCopyLink}
+            onMouseEnter={() => linkIconRef.current?.startAnimation()}
+            onMouseLeave={() => linkIconRef.current?.stopAnimation()}
             className="w-xs transition-all duration-150 ease-in-out hover:scale-98"
           >
             <span className="flex items-center gap-2 relative">
               <span className="relative w-4 h-4 flex items-center justify-center">
-                <Link2
-                  className={`h-4 w-4 absolute transition-all duration-300 ${
-                    copied
-                      ? "rotate-0 scale-100 opacity-100"
-                      : "-rotate-90 scale-0 opacity-0"
+                <LinkIcon
+                  ref={linkIconRef}
+                  size={16}
+                  className={`absolute transition-all duration-300 ${
+                    copied ? "scale-100 opacity-100" : "scale-0 opacity-0"
                   }`}
                 />
                 <Share2
                   className={`h-4 w-4 absolute transition-all duration-300 ${
-                    copied
-                      ? "rotate-90 scale-0 opacity-0"
-                      : "rotate-0 scale-100 opacity-100"
+                    copied ? "scale-0 opacity-0" : "scale-100 opacity-100"
                   }`}
                 />
               </span>
